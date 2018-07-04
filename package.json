@@ -1,0 +1,27 @@
+{
+  "name": "qstation",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lnquy065/QStation.git"
+  },
+  "author": "lnquy065",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lnquy065/QStation/issues"
+  },
+  "homepage": "https://github.com/lnquy065/QStation#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "cookie-parser": "^1.4.3",
+    "express": "^4.16.3",
+    "moment": "^2.22.2",
+    "multer": "^1.3.1",
+    "mysql": "^2.15.0"
+  }
+}
