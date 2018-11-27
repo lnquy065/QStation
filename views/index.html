@@ -1,0 +1,832 @@
+<html>
+
+<head>
+    <title>QStation</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+    <style>
+        body {
+            height: 100vh;
+            display: flex;
+        }
+
+        #div-slidemenu {
+            background-color: rgb(41, 41, 41);
+            min-width: 250px;
+            height: 100%;
+            width: 250px;
+            border-right: 2px solid green;
+            position: fixed;
+        }
+
+        #div-content {
+            flex: 1;
+            margin-left: 260px;
+        }
+
+        #div-nothing {
+            flex: 1;
+            margin-left: 260px;
+        }
+
+        .node-item {
+            background-color: rgb(71, 71, 71);
+            padding: 5px 10px;
+            color: white;
+            border-bottom: 1px solid rgb(156, 156, 156);
+            transition: 0.5s;
+        }
+
+        .node-item:hover {
+            background-color: rgb(185, 185, 185);
+            color: black;
+        }
+
+
+
+
+        .node-name {
+            margin-right: 5px;
+        }
+
+        .node-pos {
+            font-size: 15px;
+        }
+
+        .node-name,
+        .node-id {
+            font-size: 18px;
+        }
+
+        .card-body img {
+            margin: 5px;
+        }
+
+        .card-header {
+            padding: 4px 0px 0px 5px;
+        }
+
+        .card-header img {
+            margin-right: 5px;
+            width: 25px;
+        }
+
+        .card {
+            margin: 5px;
+        }
+
+        td {
+            margin: 2px;
+        }
+
+        th {
+            padding: 2px 5px;
+        }
+
+        #div-admin {
+            position: fixed;
+            top: 0px;
+            right: 0px;
+            background-color: #f4f8ff;
+            padding: 5px;
+            border: 1px solid #b5cfff;
+            border-radius: 0px 0px 0px 5px;
+            z-index: 100;
+        }
+    </style>
+
+</head>
+
+<body>
+    <!-- SLIDE MENU -->
+    <div id="div-slidemenu">
+        <div id="div-logo" style="background-color: rgb(255, 255, 255); border-bottom: 2px solid #01991C">
+            <img src="res/img/qstation.png" width="250px" style="margin: 5px">
+        </div>
+        <button type="button" class="btn btn-info" id="edit-add-node" style="width: 98%; margin: 2px" data-toggle="modal" data-target="#addModal"
+            onclick="addNewNode()">
+            <img src="res/img/add.png" width="16">
+        </button>
+        <div id="div-loading">
+            <img src="res/img/loading.gif" alt="" width="75px" style="margin: 100% auto; display: block">
+        </div>
+
+        <div id="div-nodeListContainer">
+
+        </div>
+        <div id="div-footer" style="text-align: center; position: absolute; bottom: 5px; left: 10px;">
+            <i style="color: white">Copyright © 2018 by Ln Quy</i>
+        </div>
+    </div>
+
+    <!-- MODAL -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                        <img src="res/img/edit.png" width="16"> Chỉnh sửa thông tin</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <b>Mã trạm </b>
+                        <b id="edit-node-id"></b>
+                        <br>
+                        <div class="form-group">
+                            <label for="recipient-name" class="col-form-label">Tên trạm</label>
+                            <input type="text" class="form-control" id="edit-node-name">
+                        </div>
+                        <div class="form-group">
+                            <label for="recipient-name" class="col-form-label">Kinh độ</label>
+                            <input type="text" class="form-control" id="edit-node-lat">
+                        </div>
+                        <div class="form-group">
+                            <label for="recipient-name" class="col-form-label">Vĩ độ</label>
+                            <input type="text" class="form-control" id="edit-node-lng">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" id="edit-close">Đóng</button>
+                    <button type="button" class="btn btn-primary" onclick="editSave()">Lưu</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                        <img src="res/img/addb.png" width="16"> Thêm trạm mới</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <b>Mã trạm </b>
+                        <b id="add-node-id"></b>
+                        <br>
+                        <div class="form-group">
+                            <label for="recipient-name" class="col-form-label">Tên trạm</label>
+                            <input type="text" class="form-control" id="add-node-name">
+                        </div>
+                        <div class="form-group">
+                            <label for="recipient-name" class="col-form-label">Kinh độ</label>
+                            <input type="text" class="form-control" id="add-node-lat">
+                        </div>
+                        <div class="form-group">
+                            <label for="recipient-name" class="col-form-label">Vĩ độ</label>
+                            <input type="text" class="form-control" id="add-node-lng">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" id="add-close">Đóng</button>
+                    <button type="button" class="btn btn-primary" onclick="editAdd()">Thêm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="removeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                        <img src="res/img/removeb.png" width="16"> Xác nhận xóa</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Tất cả dữ liệu của
+                    <b id="remove-node-id"></b> sẽ bị xóa vĩnh viễn!
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" id="remove-close">Đóng</button>
+                    <button type="button" class="btn btn-primary" onclick="editRemove()">Xóa</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ADMIN -->
+    <div id="div-admin">
+        <button class="btn btn-danger" onclick="logout()">Đăng Xuất</button>
+        <button class="btn btn-default" onclick="manager()">Quản Lý</button>
+    </div>
+    <!-- NOTHING -->
+    <div id="div-nothing" style="text-align: center">
+        <img src="res/img/nothing.png" style="display: block; width: 200px; margin: 0px auto; margin-top: 10%">
+        <i style="color: gray">Vui lòng chọn trạm!</i>
+    </div>
+    <!-- CONTENT -->
+    <div id="div-content" style="display: none">
+        <div class="card-group">
+
+
+            <!-- THONG TIN -->
+            <div class="card">
+                <div class="card-header">
+                    <h4>
+                        <img src="res/img/info.png">Thông tin trạm</h4>
+                </div>
+                <div class="card-body">
+                    <h5 style="margin-bottom: 5px">Tên trạm:
+                        <b id="cnode-name"></b>
+                    </h5>
+                    <!-- <span style="margin-bottom: 10px;display: block">Dữ liệu thời gian thực: CO2 (
+                        <b id="rnode-co2"></b> ppm) - Bụi (
+                        <b id="rnode-dust"></b> µg/m3) - UV (
+                        <b id="rnode-uv"></b> mW/cm2)
+                    </span> -->
+                    <img src="res/img/qnode.png" width="15px">Chi tiết trạm:
+                    <b id="cnode-id"></b>
+                    <a id="cnode-pos"></a>
+
+
+                    <br><img src="res/img/co2on.png" width="15px">Nồng độ CO2 (ppm)</td>
+
+                    <table border="1px" style="text-align: center; width: 300px">
+                            <tr>
+                                    <td>Hiện tại</td>
+                                    <td><b id="rnode-co2"></b></td>
+                                </tr>
+                        <tr>
+                            <td>Cao nhất</td>
+                            <td><b id="cnode-co2-max"></b></td>
+                        </tr>
+                        <tr>
+                            <td>Trung bình</td>
+                            <td><b id="cnode-co2-avg"></b></td>
+                        </tr>
+                        <tr>
+                                <td>Dự đoán trung bình (<span id="cnode-nextday"></span>)</td>
+                                <td><b id="cnode-co2-predict"></b></td>
+                            </tr>
+                    </table>
+
+
+                    <br>
+                    <div class="btn-group" role="group" aria-label="">
+                        <button type="button" class="btn btn-light" data-toggle="modal" data-target="#exampleModal" onclick="editNode()">
+                            <img src="res/img/edit.png" width="16">
+                        </button>
+                        <button type="button" class="btn btn-light" data-toggle="modal" data-target="#removeModal" onclick="openRemoveModal()">
+                            <img src="res/img/remove.png" width="16">
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <!-- BAN DO -->
+
+            <div class="card" style="display: block">
+                <div class="card-header">
+                    <h4>
+                        <img src="res/img/map.png">Bản đồ</h4>
+                </div>
+                <div class="card-body" style="padding: 2px">
+                    <div id="map" style="width: 98%; height: 260px; display: block;margin: 5px auto;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- BIEU DO -->
+        <div class="card">
+            <div class="card-header">
+                <h4>
+                    <img src="res/img/chart.png">Biểu đồ</h4>
+            </div>
+            <div class="card-body">
+
+
+                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Lịch Sử</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false"
+                            onclick="switchToRealTimeChart()">Thời Gian Thực</a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="myTabContent">
+                    <!-- TAB LICH SU -->
+                    <div class="tab-pane show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                        <!-- BANG DIEU KHIEN THOI GIAN -->
+                        <div class="input-group" style="width: 400px;margin-top: 15px">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Ngày</span>
+                            </div>
+                            <input class="form-control" id="cdate" type="date">
+                            <div class="btn-group">
+                                <button class="btn btn-primary" onclick="dateChange()">Đổi</button>
+                                <button class="btn btn-primary" onclick="datePrev()">
+                                    <</button>
+                                        <button class="btn btn-primary" onclick="dateToday()">o</button>
+                                        <button class="btn btn-primary" onclick="dateNext()">></button>
+                            </div>
+
+                        </div>
+                        <!-- BIEU DO -->
+                        <div id="chartContainer" style="height: 350px;width: 100%"></div>
+                    </div>
+                    <!-- TAB THOI GIAN THUC -->
+                    <div class="tab-pane" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                        <div id="chartRContainer" style="height: 350px;width: 100%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- GOOGLE MAP SERVICE -->
+    <script>
+        var map;
+        function initMap() {
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: { lat: -34.397, lng: 150.644 },
+                zoom: 8
+            });
+        }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDxyHBFqWHTd4Uzs9p4TvmgmSEuInNDk5Q&callback=initMap" async
+        defer></script>
+
+    <!-- FIREBASE SERVICE -->
+    <script src="https://www.gstatic.com/firebasejs/5.3.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.3.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.3.0/firebase-database.js"></script>
+
+    <script>
+        var config = {
+            apiKey: "AIzaSyDxyHBFqWHTd4Uzs9p4TvmgmSEuInNDk5Q",
+            authDomain: "qstation-5bd62.firebaseapp.com",
+            databaseURL: "https://qstation-5bd62.firebaseio.com",
+            projectId: "qstation-5bd62"
+        };
+        firebase.initializeApp(config);
+    </script>
+
+    <script>
+        var map;
+        var chart;
+        var marker;
+        var chartR;
+        var initRData;
+        var currentNode = {
+            id: "",
+            name: "",
+            lat: "",
+            lng: ""
+        }
+
+        refreshNodeList(null);
+
+        function showContent(callback) {
+            $('#div-nothing').fadeOut(0);
+            $('#div-content').fadeIn(300, function () {
+                callback();
+            })
+        }
+
+        function hideContent() {
+            $('#div-nothing').fadeIn(300);
+            $('#div-content').fadeOut(0);
+        }
+
+        function refreshNodeList(callback) {
+            $.ajax({
+                url: 'node',
+                type: 'GET',
+                success: ret => {
+                    let nodeListContainer = $('#div-nodeListContainer');
+                    nodeListContainer.empty();
+                    $('#div-loading').fadeOut(300);
+                    setTimeout(() => {
+                        ret.forEach((e, i) => {
+                            nodeListContainer.append('<div id="node-' + e.id + '" class="node-item active" onclick="chooseNodeItem(\'' + e.id + '\')" ><b class="node-name">' + e.name + '</b>(<b class="node-id">' + e.id + '</b>)<br><i class="node-pos">(' + e.lat + ',' + e.lng + ')</i></div>');
+                            if (i === ret.length - 1) {
+                                if (callback !== null) callback();
+                            }
+                        });
+                    }, 300);
+
+
+                }
+            });
+        }
+
+        function switchToRealTimeChart() {
+            refreshRealtimeChart(currentNode.id, 20);
+        }
+
+        function switchToHistoryChart() {
+            refeshChart(currentNode.id);
+        }
+
+
+        function openRemoveModal() {
+            $('#remove-node-id').text(currentNode.id);
+        }
+
+        function editRemove() {
+            let nodeId = currentNode.id;
+            //Xoa INFO
+            firebase.database().ref('/nodeInfo').child(nodeId).remove();
+            //Xoa DATA
+            firebase.database().ref('/nodeData').child(nodeId).remove();
+            $('#remove-close').click();
+            refreshNodeList(null);
+            hideContent();
+        }
+
+        function addNewNode() {
+            //DEM SO LUONG NODE
+
+            firebase.database().ref('/nodeInfo').once('value').then(snapshot => {
+                let nodeCount = snapshot.numChildren() + 1;
+                let nodeId = 'N' + padding(nodeCount + '', 2, '0');
+
+                $('#add-node-id').text(nodeId);
+            });
+        }
+
+        function editAdd() {
+            let nodeName = $('#add-node-name').val();
+            let nodeLat = $('#add-node-lat').val();
+            let nodeLng = $('#add-node-lng').val();
+            let nodeId = $('#add-node-id').text();
+            firebase.database().ref('/nodeInfo').child(nodeId).set({
+                name: nodeName,
+                lat: nodeLat,
+                lng: nodeLng
+            });
+            $('#add-close').click();
+            refreshNodeList(null);
+        }
+
+        function padding(str, length, paddingChar) {
+            while (str.length < length) {
+                str = paddingChar + str;
+            }
+            return str;
+        }
+
+        function editNode() {
+            $('#edit-node-name').val(currentNode.name);
+            $('#edit-node-lat').val(currentNode.lat);
+            $('#edit-node-lng').val(currentNode.lng);
+            $('#edit-node-id').text(currentNode.id);
+        }
+
+        function editSave() {
+            let nodeName = $('#edit-node-name').val();
+            let nodeLat = $('#edit-node-lat').val();
+            let nodeLng = $('#edit-node-lng').val();
+            let nodeId = $('#edit-node-id').text();
+            if (nodeName === "" || nodeLat === "" || nodeLng === "") {
+                alert("Vui lòng không để trống thông tin!");
+                return;
+            }
+            console.log(nodeName);
+            //LUU VAO FB
+            firebase.database().ref('/nodeInfo').child(nodeId).set({
+                name: nodeName,
+                lat: nodeLat,
+                lng: nodeLng
+            });
+            $('#edit-close').click();
+            refreshNodeList(function () {
+                chooseNodeItem(nodeId);
+            });
+        }
+
+        function dateChange() {
+            let nodeId = $('#cnode-id').text();
+            refeshChart(nodeId);
+        }
+
+        function datePrev() {
+            let date = new Date($('#cdate').val());
+            date.setDate(date.getDate() - 1);
+            $('#cdate').val(date.toDateInputValue());
+            let nodeId = $('#cnode-id').text();
+            refeshChart(nodeId);
+        }
+
+        function dateNext() {
+            let date = new Date($('#cdate').val());
+            date.setDate(date.getDate() + 1);
+            $('#cdate').val(date.toDateInputValue());
+            let nodeId = $('#cnode-id').text();
+            refeshChart(nodeId);
+        }
+
+        function dateToday() {
+            $('#cdate').val(new Date().toDateInputValue());
+            let nodeId = $('#cnode-id').text();
+            refeshChart(nodeId);
+        }
+
+
+        function refreshRealtimeChart(nodeId, limit) {
+            let chartDatas = chartR.data;
+            console.log(chartDatas);
+            let co2Data = chartDatas[0].dataPoints;
+            co2Data.length = 0;
+            $.ajax({
+                url: 'node/data/' + nodeId + '/' + limit,
+                type: 'GET',
+                success: (msg) => {
+                    let maxCo2 = 0, maxUv = 0, maxDust = 0;
+                    let index = 0;
+                    msg.forEach(s => {
+                        index++;
+                        let date = new Date(s.timeStamp);
+                        let oCo2 = s.vCo2;
+                        co2Data.push({ x: index, y: oCo2, date: date });
+                    })
+                    chartR.render();
+                }
+            })
+        }
+
+        function addItemToRealtimeChart(nodeID, item) {
+            //Lay danh sach data
+            let chartDatas = chartR.data;
+            let co2Data = chartDatas[0].dataPoints;
+            //Them vao
+            co2Data.push({
+                x: item.timeStamp,
+                y: item.co2
+            })
+            chartR.render();
+        }
+
+        function refeshChart(nodeId) {
+            //find data points
+            console.log(chart);
+            let chartDatas = chart.data;
+            console.log(chartDatas);
+            let co2Data = chartDatas[0].dataPoints;
+            //clear
+            co2Data.length = 0;
+            //
+            let cDate = new Date($('#cdate').val());
+            cDate.setHours(0);
+            console.log(cDate);
+            let maxHours = 24;
+            for (let i = 0; i < maxHours; i++) {
+                let newDate = new Date(cDate);
+                newDate.setHours(newDate.getHours() + i);
+                co2Data.push({
+                    x: newDate,
+                    y: 0
+                })
+            }
+            //Lay danh sach data theo node
+            console.log('node/chart/' + nodeId + '/' + cDate);
+            $.ajax({
+                url: 'node/chart/' + nodeId + '/' + cDate.toYMD(),
+                type: 'GET',
+                success: (msg) => {
+                    let maxCo2 = 0;
+                    let avg = {
+                        co2: 0,
+                        count: 0
+                    }
+                    msg.forEach(s => {
+
+                        let date = new Date(s.timeStamp);
+                        let oCo2 = co2Data[date.getHours()].y;
+                        
+                        avg.count++;
+                        avg.co2+= s.vCo2 > 10000 ? 0 : s.vCo2;
+
+                        if (oCo2 < s.vCo2) {
+                            co2Data[date.getHours()].y = s.vCo2 > 10000 ? 0 : s.vCo2;
+                            if (maxCo2 < s.vCo2) maxCo2 = s.vCo2;
+                        }
+                    })
+                    //GAN GIA TRI MAX
+                    $('#cnode-co2-max').text(maxCo2);
+
+                    //GAN GIA TRI TRUNG BINH
+                    let gttb =removeNaN(Math.floor( avg.co2 / avg.count)) 
+                    $('#cnode-co2-avg').text( gttb );
+                    chart.axisY[0].stripLines[0].set('value', gttb) ;
+                    chart.axisY[0].stripLines[0].set('label', gttb) ;
+                    chart.render();
+                }
+            })
+
+
+        }
+
+
+        function removeNaN(number) {
+            if (isNaN(number)) return 0;
+            return number;
+        }
+
+        function chooseNodeItem(nodeId) {
+            let nodeItem = $('#node-' + nodeId);
+            console.log('select' + nodeId);
+            console.log(nodeItem);
+            //GAN THONG TIN NODE
+            currentNode.id = nodeId;
+            currentNode.name = nodeItem.children('.node-name').text();
+
+            let pos = nodeItem.children('.node-pos').text();
+            pos = pos.substring(1);
+            pos = pos.slice(0, -1);
+            pos = pos.split(',');
+            currentNode.lat = parseFloat(pos[0]);
+            currentNode.lng = parseFloat(pos[1]);
+
+
+            $('#cnode-name').text(nodeItem.children('.node-name').text());
+            $('#cnode-id').text(nodeId);
+            $('#cnode-pos').text(nodeItem.children('.node-pos').text());
+
+            showContent(function () {
+                refeshChart(nodeId);
+            });
+
+
+            if (marker) marker.setMap(null);
+            marker = new google.maps.Marker({ position: { lat: parseFloat(pos[0]), lng: parseFloat(pos[1]) }, map: map });
+            map.setCenter({ lat: parseFloat(pos[0]), lng: parseFloat(pos[1]) });
+            map.setZoom(17);
+            initRData = true;
+
+            //LAY THONG TIN DU DOAN
+            $.ajax({
+                url: 'node/predict/'+nodeId,
+                method: 'get',
+                success: function(msg) {
+                    let predictCo2 = msg.co2;
+                    $('#cnode-co2-predict').text(predictCo2);
+                }
+            })
+
+
+
+            //DANG KY REALTIME TU FIREBASE
+            firebase.database().ref('/nodeData').child(nodeId).on('child_added', (snap) => {
+                $('#rnode-co2').text(snap.child('vCo2').val());
+                $('#rnode-dust').text(snap.child('vDust').val());
+                $('#rnode-uv').text(snap.child('vUv').val());
+                if (!initRData) {
+                    refreshRealtimeChart(nodeId, 20);
+                }
+            });
+            firebase.database().ref('/nodeData').child(nodeId).once('value', function (snap) {
+                initRData = false;
+            })
+
+            //TAI 20 DU LIEU MOI NHAT
+            // refreshRealtimeChart(nodeId, 20);
+        }
+
+        window.onload = function () {
+            let tDate = new Date();
+            tDate.setDate(tDate.getDate() + 1);
+            let dateString = ( tDate.getDate()<10? '0'+tDate.getDate():tDate.getDate() ) + '/';
+            dateString += (tDate.getMonth()+1)<10? '0'+(tDate.getMonth()+1):(tDate.getMonth()+1);
+            dateString += '/'+tDate.getFullYear();
+            $('#cnode-nextday').text(dateString);
+
+            //BIEU DO LICH SU
+            $('#cdate').val(new Date().toDateInputValue());
+            chart = new CanvasJS.Chart("chartContainer", {
+                title: {
+                    text: ""
+                },
+                axisY:
+                {
+                    title: "CO2 (ppm)",
+                    lineColor: "#369EAD",
+                    tickColor: "#369EAD",
+                    labelFontColor: "#369EAD",
+                    titleFontColor: "#369EAD",
+                    stripLines: [{
+                        value: 0,
+                        label: "Trung bình"
+                    }]
+                },
+                toolTip: {
+                    shared: true
+                },
+                legend: {
+                    cursor: "pointer",
+                    itemclick: toggleDataSeries
+                },
+                data: [{
+                    type: "line",
+                    name: "CO2",
+                    color: "#369EAD",
+                    showInLegend: true,
+                    axisYIndex: 1,
+                    dataPoints: []
+                }]
+            });
+            chart.render();
+
+            //BIEU DO THOI GIAN THUC
+            chartR = new CanvasJS.Chart("chartRContainer", {
+                title: {
+                    text: ""
+                },
+                toolTip: {
+                    shared: true,
+                    contentFormatter: function (e) {
+                        var content = " ";
+                        for (var i = 0; i < e.entries.length; i++) {
+                            content += e.entries[i].dataSeries.name + " " + "<strong>" + e.entries[i].dataPoint.y + "</strong>";
+                            content += "<br/>";
+                        }
+                        return content;
+                    }
+                },
+                axisY: 
+                {
+                    title: "CO2 (ppm)",
+                    lineColor: "#369EAD",
+                    tickColor: "#369EAD",
+                    labelFontColor: "#369EAD",
+                    titleFontColor: "#369EAD"
+                },
+                toolTip: {
+                    shared: true
+                },
+                legend: {
+                    cursor: "pointer",
+                    itemclick: toggleDataSeries
+                },
+                data: [{
+                    type: "line",
+                    name: "CO2",
+                    color: "#369EAD",
+                    showInLegend: true,
+                    axisYIndex: 1,
+                    dataPoints: []
+                }]
+            });
+            chartR.render();
+
+            function toggleDataSeries(e) {
+                if (typeof (e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+                    e.dataSeries.visible = false;
+                } else {
+                    e.dataSeries.visible = true;
+                }
+                e.chart.render();
+            }
+
+        }
+        Date.prototype.toDateInputValue = (function () {
+            var local = new Date(this);
+            local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
+            return local.toJSON().slice(0, 10);
+        });
+
+        Date.prototype.toYMD = (function () {
+            var local = new Date(this);
+            let y = local.getFullYear();
+            let m = local.getMonth() + 1;
+            let d = local.getDate();
+            return local.getFullYear() + '-' + (m < 10 ? '0' : '') + m + '-' + (d < 10 ? '0' : '') + d;
+        });
+
+
+        function logout() {
+            window.location = "/logout";
+        }
+
+        function manager() {
+            window.location = "/account";
+        }
+
+    </script>
+
+
+</body>
+
+
+
+</html>

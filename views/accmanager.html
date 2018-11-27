@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <title>QL Tai khoan</title>
+    <style>
+        #tbl-users {
+            width: 100%;
+            background: white;
+        }
+
+        #tbl-users td {
+            padding: 5px;
+        }
+
+        #tbl-users th {
+            text-align: center;
+            padding: 5px 10px;
+        }
+
+        #div-tbl{
+            background-color: #f4f8ff;
+            padding: 5px;
+            border: 1px solid #b5cfff;
+            border-radius: 10px;
+            width: 600px;
+            display: block;
+            margin: 100px auto;
+        }
+    </style>
+
+</head>
+<body>
+    <div id="div-tbl">
+            <img src="res/img/qstation.png" width="250px" style="margin: 5px; margin-bottom: 20px">
+        <table id="tbl-users" border="1px">
+                    <tr>
+                            <th>Stt</th>
+                            <th>Email</th>
+                            <th>UID</th>
+                            <th>Trạng thái</th>
+                        </tr>
+            
+        </table>
+    </div>
+    <script>
+        $(document).ready(function() {
+            getUserList();
+        });
+        
+        function getUserList() {
+            $.ajax({
+                url: '/users',
+                method: 'get',
+                success: function(msg) {
+                    let count = 1;
+                    let user;
+                    console.log(msg[0]);
+                    for (i=0; i < msg.length; i++) {
+                        user = msg[i];
+                        $('#tbl-users tbody').append('<tr><td>'+(count++)+'</td><td>'+user.val.email+'</td><td>'+user.uid+'</td><td><a href="/approved/'+user.uid+'">'+user.val.approved+'</a></td></tr>');
+                    };
+                }
+            })
+        }
+    </script>
+</body>
+
+</html>
