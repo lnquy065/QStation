@@ -249,65 +249,20 @@ function predictCo2Value(nodeId) {
 
 
 function getPredictionCo2(req, res) {
-    let date = new Date();
-    date.setDate(date.getDate() - 20);
     let id = req.params.id;
-    let startTime = date.getTime();
-   
-    let endTime = new Date();
-    endTime = endTime.getTime();
-    let retJson = [];
-    let dataByDate  = {};
-
-    let nodeDataRef  = firebase.database().ref('/nodeData/'+id);
-    nodeDataRef.orderByChild('timeStamp').startAt(startTime).endAt(endTime).once('value').then( snapshot => {
-        snapshot.forEach( s => {
-            // console.log(s.val());
-            let tDate = new Date(s.val().timeStamp);
-            let dateString = tDate.getDate()<10? '0'+tDate.getDate():tDate.getDate() + '';
-            dateString +=  ''+(tDate.getMonth()+1)<10? '0'+(tDate.getMonth()+1):(tDate.getMonth()+1);
-            dateString += ''+tDate.getFullYear();
-            //Chia du lieu thanh tung ngay
-            if (dataByDate[dateString] === undefined ) dataByDate[dateString] = [];
-            dataByDate[dateString].push(s.val().vCo2);
-            retJson.push(s);
-        })
-        
-        //Tinh trung binh tung ngay
-        var pretrainArray = [];
-        for(keys in dataByDate) {
-            let co2Array = dataByDate[keys];
-            let sumCo2 = co2Array.reduce( (a,b) => a + b);
-            pretrainArray.push(  Math.round(sumCo2 / co2Array.length)  );
-        }
-        let maxV = Math.max.apply(Math, pretrainArray);
-        let minV = Math.min.apply(Math, pretrainArray);
-        let delta = maxV - minV;
-        //May hoc
-        let net = new brain.recurrent.LSTMTimeStep();
-        let sliced = pretrainArray.slice(-1);
-        console.log("===== Du doan ket qua ======");
-        console.log(pretrainArray.slice(0, -1));
-        console.log(sliced);
-        net.train( [pretrainArray.slice(0, -1)] );
-        
-        let predictedCo2 = net.run( sliced ) * delta;
-        predictedCo2 = (maxV + minV + predictedCo2 )/3
-
-
-       
-       // let predictedCo2 = 0;
-        res.send(JSON.parse( `{"co2": `+predictedCo2+`}`));
+    let tDate = new Date();
+    let dateString = tDate.getDate()<10? '0'+tDate.getDate():tDate.getDate() + '';
+    dateString +=  ''+(tDate.getMonth()+1)<10? '0'+(tDate.getMonth()+1):(tDate.getMonth()+1);
+    dateString += ''+tDate.getFullYear();
+    console.log('/nodePrediction/'+id + '/' +dateString);
+    let nodeInfoRef  = firebase.database().ref('/nodePrediction/'+id).child(dateString);
+    nodeInfoRef.once("value").then(function(snapshot) {
+        let co2 = snapshot.val();
+        if (co2 !== null) res.send( JSON.parse('{"co2": "'+co2+'"}'));
+        else res.send( JSON.parse('{"co2": "'+0+'"}'));
     });
 }
 
-
-function normalize(min, max) {
-    var delta = max - min;
-    return function (val) {
-        return (val - min) / delta;
-    };
-}
 
 
 function getNodesList(req, res) {

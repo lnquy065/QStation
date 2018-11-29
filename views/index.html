@@ -274,7 +274,7 @@
                             <td><b id="cnode-co2-avg"></b></td>
                         </tr>
                         <tr>
-                                <td>Dự đoán trung bình (<span id="cnode-nextday"></span>)</td>
+                                <td>Dự đoán trung bình hôm nay</td>
                                 <td><b id="cnode-co2-predict"></b></td>
                             </tr>
                     </table>
@@ -604,16 +604,18 @@
                 url: 'node/chart/' + nodeId + '/' + cDate.toYMD(),
                 type: 'GET',
                 success: (msg) => {
+                    // console.log(msg);
                     let maxCo2 = 0;
                     let avg = {
                         co2: 0,
                         count: 0
                     }
                     msg.forEach(s => {
-
+                        //1543424401081
+                        //1540832401145
                         let date = new Date(s.timeStamp);
                         let oCo2 = co2Data[date.getHours()].y;
-                        
+                        // console.log(date.getHours() + s.timeStamp);
                         avg.count++;
                         avg.co2+= s.vCo2 > 10000 ? 0 : s.vCo2;
 
@@ -621,6 +623,8 @@
                             co2Data[date.getHours()].y = s.vCo2 > 10000 ? 0 : s.vCo2;
                             if (maxCo2 < s.vCo2) maxCo2 = s.vCo2;
                         }
+
+
                     })
                     //GAN GIA TRI MAX
                     $('#cnode-co2-max').text(maxCo2);
@@ -709,7 +713,7 @@
             let dateString = ( tDate.getDate()<10? '0'+tDate.getDate():tDate.getDate() ) + '/';
             dateString += (tDate.getMonth()+1)<10? '0'+(tDate.getMonth()+1):(tDate.getMonth()+1);
             dateString += '/'+tDate.getFullYear();
-            $('#cnode-nextday').text(dateString);
+            // $('#cnode-nextday').text(dateString);
 
             //BIEU DO LICH SU
             $('#cdate').val(new Date().toDateInputValue());
