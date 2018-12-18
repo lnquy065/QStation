@@ -150,7 +150,7 @@ function approvedRequest(req, res) {
 
 
 /*
-Lay du lieu cua mot Node theo so ngay
+Lay du lieu cua mot Node theo so mau tin
 */
 function getNodeChartByLimit(req, res) {
     let id = req.params.id;
@@ -160,7 +160,7 @@ function getNodeChartByLimit(req, res) {
 
     let retJson = [];
     let nodeDataRef  = firebase.database().ref('/nodeData/'+id);
-    nodeDataRef.orderByChild('timeStamp').limitToLast(limit).once('value').then( snapshot => {
+    nodeDataRef.limitToLast(limit).once('value').then( snapshot => {
         snapshot.forEach( s => {
             retJson.push(s);
         })
