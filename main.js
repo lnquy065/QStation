@@ -10,6 +10,8 @@ var bodyParser = require('body-parser');
 var fbUsername = "lnquy065@gmail.com";
 var fbPassword = "123456";
 
+
+
 //PATH
 var appPath = {
     login: path.join(__dirname+'/views/login.html'),
@@ -120,7 +122,8 @@ function predictCo2AllNode() {
      // console.log(snapshot.key);
       snapshot.forEach( s => {
           //Du doan va luu vao
-          predictCo2Value(s.key);
+          
+          if (s.key === 'N04' ) predictCo2Value(s.key);
       });
   });
 }
@@ -151,7 +154,7 @@ function approvedRequest(req, res) {
 
 /*
 Lay du lieu cua mot Node theo so mau tin
-*/
+*/ 
 function getNodeChartByLimit(req, res) {
     let id = req.params.id;
     let limit = parseInt(req.params.limit);
@@ -236,7 +239,6 @@ function predictCo2Value(nodeId) {
         net.train( [pretrainArray.slice(0, -1)] );
         
         let predictedCo2 = net.run( sliced ) * delta;
-        predictedCo2 = (maxV + minV + predictedCo2 )/3;
 
         //Luu vao firebase
         let tDate = new Date();

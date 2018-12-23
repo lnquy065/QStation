@@ -111,8 +111,8 @@
         <div id="div-logo" style="background-color: rgb(255, 255, 255); border-bottom: 2px solid #01991C">
             <img src="res/img/qstation.png" width="250px" style="margin: 5px">
         </div>
-        <button type="button" class="btn btn-info" id="edit-add-node" style="width: 98%; margin: 2px" data-toggle="modal" data-target="#addModal"
-            onclick="addNewNode()">
+        <button type="button" class="btn btn-info" id="edit-add-node" style="width: 98%; margin: 2px" data-toggle="modal"
+            data-target="#addModal" onclick="addNewNode()">
             <img src="res/img/add.png" width="16">
         </button>
         <div id="div-loading">
@@ -128,7 +128,8 @@
     </div>
 
     <!-- MODAL -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -202,7 +203,8 @@
         </div>
     </div>
 
-    <div class="modal fade" id="removeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="removeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -258,34 +260,47 @@
                     <a id="cnode-pos"></a>
 
 
-                    <br><img src="res/img/co2on.png" width="15px">Nồng độ CO2 (ppm)</td>
 
                     <table border="1px" style="text-align: center; width: 300px">
-                            <tr>
-                                    <td>Hiện tại</td>
-                                    <td><b id="rnode-co2"></b></td>
-                                </tr>
+                        <tr>
+                            <td></td>
+                            <td>CO2 (ppm)</td>
+                            <td>Bụi (µg/m3)</td>
+                            <td>UV (mW/cm2)</td>
+                        </tr>
+                        <tr>
+                            <td>Hiện tại</td>
+                            <td><b id="rnode-co2"></b></td>
+                            <td><b id="rnode-dust"></b></td>
+                            <td><b id="rnode-uv"></b></td>
+                        </tr>
                         <tr>
                             <td>Cao nhất</td>
                             <td><b id="cnode-co2-max"></b></td>
+                            <td><b id="cnode-dust-max"></b></td>
+                            <td><b id="cnode-uv-max"></b></td>
                         </tr>
                         <tr>
                             <td>Trung bình</td>
                             <td><b id="cnode-co2-avg"></b></td>
+                            <td><b id="cnode-dust-avg"></b></td>
+                            <td><b id="cnode-uv-avg"></b></td>
                         </tr>
                         <tr>
-                                <td>Dự đoán trung bình hôm nay</td>
-                                <td><b id="cnode-co2-predict"></b></td>
-                            </tr>
+                            <td>Dự đoán trung bình hôm nay</td>
+                            <td><b id="cnode-co2-predict"></b></td>
+                        </tr>
                     </table>
 
 
                     <br>
                     <div class="btn-group" role="group" aria-label="">
-                        <button type="button" class="btn btn-light" data-toggle="modal" data-target="#exampleModal" onclick="editNode()">
+                        <button type="button" class="btn btn-light" data-toggle="modal" data-target="#exampleModal"
+                            onclick="editNode()">
                             <img src="res/img/edit.png" width="16">
                         </button>
-                        <button type="button" class="btn btn-light" data-toggle="modal" data-target="#removeModal" onclick="openRemoveModal()">
+                        <button type="button" class="btn btn-light" data-toggle="modal" data-target="#removeModal"
+                            onclick="openRemoveModal()">
                             <img src="res/img/remove.png" width="16">
                         </button>
                     </div>
@@ -315,11 +330,12 @@
 
                 <ul class="nav nav-tabs" id="myTab" role="tablist">
                     <li class="nav-item">
-                        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Lịch Sử</a>
+                        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
+                            aria-controls="home" aria-selected="true">Lịch Sử</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false"
-                            onclick="switchToRealTimeChart()">Thời Gian Thực</a>
+                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile"
+                            aria-selected="false" onclick="switchToRealTimeChart()">Thời Gian Thực</a>
                     </li>
                 </ul>
                 <div class="tab-content" id="myTabContent">
@@ -334,9 +350,9 @@
                             <div class="btn-group">
                                 <button class="btn btn-primary" onclick="dateChange()">Đổi</button>
                                 <button class="btn btn-primary" onclick="datePrev()">
-                                    <</button>
-                                        <button class="btn btn-primary" onclick="dateToday()">o</button>
-                                        <button class="btn btn-primary" onclick="dateNext()">></button>
+                                    <</button> <button class="btn btn-primary" onclick="dateToday()">o
+                                </button>
+                                <button class="btn btn-primary" onclick="dateNext()">></button>
                             </div>
 
                         </div>
@@ -363,8 +379,8 @@
             });
         }
     </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDxyHBFqWHTd4Uzs9p4TvmgmSEuInNDk5Q&callback=initMap" async
-        defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDxyHBFqWHTd4Uzs9p4TvmgmSEuInNDk5Q&callback=initMap"
+        async defer></script>
 
     <!-- FIREBASE SERVICE -->
     <script src="https://www.gstatic.com/firebasejs/5.3.0/firebase-app.js"></script>
@@ -546,19 +562,22 @@
         function refreshRealtimeChart(nodeId, limit) {
             let chartDatas = chartR.data;
             console.log(chartDatas);
-            let co2Data = chartDatas[0].dataPoints;
-            co2Data.length = 0;
+            let co2Data = chartDatas[1].dataPoints;
+            let dustData = chartDatas[0].dataPoints;
+            let uvData = chartDatas[2].dataPoints;
+            co2Data.length = dustData.length = uvData.length = 0;
             $.ajax({
                 url: 'node/data/' + nodeId + '/' + limit,
                 type: 'GET',
                 success: (msg) => {
-                    let maxCo2 = 0, maxUv = 0, maxDust = 0;
                     let index = 0;
                     msg.forEach(s => {
                         index++;
                         let date = new Date(s.timeStamp);
                         let oCo2 = s.vCo2;
                         co2Data.push({ x: index, y: oCo2, date: date });
+                        dustData.push({x: index, y: s.vDust, date: date});
+                        uvData.push({x: index, y: s.vUv, date: date});
                     })
                     chartR.render();
                 }
@@ -582,9 +601,13 @@
             console.log(chart);
             let chartDatas = chart.data;
             console.log(chartDatas);
-            let co2Data = chartDatas[0].dataPoints;
+            let co2Data = chartDatas[1].dataPoints;
+            let dustData = chartDatas[0].dataPoints;
+            let uvData = chartDatas[2].dataPoints;
             //clear
             co2Data.length = 0;
+            dustData.length = 0;
+            uvData.length = 0;
             //
             let cDate = new Date($('#cdate').val());
             cDate.setHours(0);
@@ -593,10 +616,22 @@
             for (let i = 0; i < maxHours; i++) {
                 let newDate = new Date(cDate);
                 newDate.setHours(newDate.getHours() + i);
-                co2Data.push({
+                let defaultValue = {
                     x: newDate,
                     y: 0
-                })
+                }
+                co2Data.push( {
+                    x: newDate,
+                    y: 0
+                });
+                dustData.push( {
+                    x: newDate,
+                    y: 0
+                });
+                uvData.push( {
+                    x: newDate,
+                    y: 0
+                });
             }
             //Lay danh sach data theo node
             console.log('node/chart/' + nodeId + '/' + cDate);
@@ -605,35 +640,51 @@
                 type: 'GET',
                 success: (msg) => {
                     // console.log(msg);
-                    let maxCo2 = 0;
+                    let maxCo2 = 0, maxDust = 0, maxUv = 0;
                     let avg = {
                         co2: 0,
+                        dust: 0,
+                        uv: 0,
                         count: 0
                     }
                     msg.forEach(s => {
-                        //1543424401081
-                        //1540832401145
                         let date = new Date(s.timeStamp);
-                        let oCo2 = co2Data[date.getHours()].y;
-                        // console.log(date.getHours() + s.timeStamp);
+                        let hour = date.getHours();
+                        let oCo2 = co2Data[hour].y;
+                        let oDust = dustData[hour].y;
+                        let oUv = uvData[hour].y;
+
                         avg.count++;
-                        avg.co2+= s.vCo2 > 10000 ? 0 : s.vCo2;
+                        avg.co2 += s.vCo2 > 10000 ? 0 : s.vCo2;
+                        avg.dust += s.vDust;
+                        avg.uv += s.vUv;
 
                         if (oCo2 < s.vCo2) {
-                            co2Data[date.getHours()].y = s.vCo2 > 10000 ? 0 : s.vCo2;
+                            co2Data[hour].y = s.vCo2 > 10000 ? 0 : s.vCo2;
                             if (maxCo2 < s.vCo2) maxCo2 = s.vCo2;
                         }
-
-
+                        if (oDust < s.vDust) {
+                            dustData[hour].y = s.vDust;
+                            if (maxDust < s.vDust) maxDust = s.vDust;
+                        }
+                        if (oUv < s.vUv) {
+                            uvData[hour].y = s.vUv;
+                            if (maxUv < s.vUv) maxUv = s.vUv;
+                        }
                     })
                     //GAN GIA TRI MAX
                     $('#cnode-co2-max').text(maxCo2);
+                    $('#cnode-dust-max').text(maxDust);
+                    $('#cnode-uv-max').text(maxUv);
 
                     //GAN GIA TRI TRUNG BINH
-                    let gttb =removeNaN(Math.floor( avg.co2 / avg.count)) 
-                    $('#cnode-co2-avg').text( gttb );
-                    chart.axisY[0].stripLines[0].set('value', gttb) ;
-                    chart.axisY[0].stripLines[0].set('label', gttb) ;
+                    let gttb = removeNaN(Math.floor(avg.co2 / avg.count))
+                    $('#cnode-co2-avg').text(gttb);
+                    $('#cnode-dust-avg').text( removeNaN(Math.floor(avg.dust / avg.count)));
+                    $('#cnode-uv-avg').text( removeNaN(Math.floor(avg.uv / avg.floor)));
+
+                    // chart.axisY[0].stripLines[0].set('value', gttb);
+                    // chart.axisY[0].stripLines[0].set('label', gttb);
                     chart.render();
                 }
             })
@@ -680,9 +731,9 @@
 
             //LAY THONG TIN DU DOAN
             $.ajax({
-                url: 'node/predict/'+nodeId,
+                url: 'node/predict/' + nodeId,
                 method: 'get',
-                success: function(msg) {
+                success: function (msg) {
                     let predictCo2 = msg.co2;
                     $('#cnode-co2-predict').text(predictCo2);
                 }
@@ -710,9 +761,9 @@
         window.onload = function () {
             let tDate = new Date();
             tDate.setDate(tDate.getDate() + 1);
-            let dateString = ( tDate.getDate()<10? '0'+tDate.getDate():tDate.getDate() ) + '/';
-            dateString += (tDate.getMonth()+1)<10? '0'+(tDate.getMonth()+1):(tDate.getMonth()+1);
-            dateString += '/'+tDate.getFullYear();
+            let dateString = (tDate.getDate() < 10 ? '0' + tDate.getDate() : tDate.getDate()) + '/';
+            dateString += (tDate.getMonth() + 1) < 10 ? '0' + (tDate.getMonth() + 1) : (tDate.getMonth() + 1);
+            dateString += '/' + tDate.getFullYear();
             // $('#cnode-nextday').text(dateString);
 
             //BIEU DO LICH SU
@@ -722,16 +773,26 @@
                     text: ""
                 },
                 axisY:
-                {
-                    title: "CO2 (ppm)",
-                    lineColor: "#369EAD",
-                    tickColor: "#369EAD",
-                    labelFontColor: "#369EAD",
-                    titleFontColor: "#369EAD",
-                    stripLines: [{
-                        value: 0,
-                        label: "Trung bình"
-                    }]
+                    [{
+                        title: "CO2 (ppm)",
+                        lineColor: "#C24642",
+                        tickColor: "#C24642",
+                        labelFontColor: "#C24642",
+                        titleFontColor: "#C24642",
+                    },
+                    {
+                        title: "Bụi (µg/m3)",
+                        lineColor: "#369EAD",
+                        tickColor: "#369EAD",
+                        labelFontColor: "#369EAD",
+                        titleFontColor: "#369EAD",
+                    }],
+                axisY2: {
+                    title: "UV (mW/cm2)",
+                    lineColor: "#7F6084",
+                    tickColor: "#7F6084",
+                    labelFontColor: "#7F6084",
+                    titleFontColor: "#7F6084",
                 },
                 toolTip: {
                     shared: true
@@ -742,10 +803,25 @@
                 },
                 data: [{
                     type: "line",
-                    name: "CO2",
+                    name: "Bụi",
                     color: "#369EAD",
                     showInLegend: true,
                     axisYIndex: 1,
+                    dataPoints: []
+                }, {
+                    type: "line",
+                    name: "CO2",
+                    color: "#C24642",
+                    showInLegend: true,
+                    axisYIndex: 0,
+                    dataPoints: []
+                },
+                {
+                    type: "line",
+                    name: "UV",
+                    color: "#7F6084",
+                    showInLegend: true,
+                    axisYType: "secondary",
                     dataPoints: []
                 }]
             });
@@ -767,13 +843,27 @@
                         return content;
                     }
                 },
-                axisY: 
-                {
-                    title: "CO2 (ppm)",
-                    lineColor: "#369EAD",
-                    tickColor: "#369EAD",
-                    labelFontColor: "#369EAD",
-                    titleFontColor: "#369EAD"
+                axisY:
+                    [{
+                        title: "CO2 (ppm)",
+                        lineColor: "#C24642",
+                        tickColor: "#C24642",
+                        labelFontColor: "#C24642",
+                        titleFontColor: "#C24642",
+                    },
+                    {
+                        title: "Bụi (µg/m3)",
+                        lineColor: "#369EAD",
+                        tickColor: "#369EAD",
+                        labelFontColor: "#369EAD",
+                        titleFontColor: "#369EAD",
+                    }],
+                axisY2: {
+                    title: "UV (mW/cm2)",
+                    lineColor: "#7F6084",
+                    tickColor: "#7F6084",
+                    labelFontColor: "#7F6084",
+                    titleFontColor: "#7F6084",
                 },
                 toolTip: {
                     shared: true
@@ -784,10 +874,25 @@
                 },
                 data: [{
                     type: "line",
-                    name: "CO2",
+                    name: "Bụi",
                     color: "#369EAD",
                     showInLegend: true,
                     axisYIndex: 1,
+                    dataPoints: []
+                }, {
+                    type: "line",
+                    name: "CO2",
+                    color: "#C24642",
+                    showInLegend: true,
+                    axisYIndex: 0,
+                    dataPoints: []
+                },
+                {
+                    type: "line",
+                    name: "UV",
+                    color: "#7F6084",
+                    showInLegend: true,
+                    axisYType: "secondary",
                     dataPoints: []
                 }]
             });
